@@ -3,7 +3,9 @@ function addComma(price) {
   const regEx = new RegExp(/\B(?=(\d{3})+(?!\d))/g);
   const formattedInteger = interger.replace(regEx, ",");
 
-  return decimal ? `${formattedInteger}.${decimal}` : formattedInteger;
+  return decimal !== undefined
+    ? `${formattedInteger}.${decimal}`
+    : formattedInteger;
 }
 
 export default addComma;
