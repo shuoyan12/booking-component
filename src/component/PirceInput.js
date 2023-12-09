@@ -1,12 +1,15 @@
 import { TextField, Box, FormHelperText, Button } from "@mui/material";
 import addComma from "../util/priceHelper";
+import { useState } from "react";
 
 function PriceInput({ price, setPrice }) {
+  const [priceWithComma, setPriceWithComma] = useState(addComma(price));
   const handleInputChange = (event) => {
     const rawInput = event.target.value;
     const sanitizedInput = rawInput.replace(/[^\d.]/g, "");
 
-    setPrice(addComma(sanitizedInput));
+    setPrice(Number(sanitizedInput));
+    setPriceWithComma(addComma(sanitizedInput));
   };
 
   return (
@@ -33,13 +36,13 @@ function PriceInput({ price, setPrice }) {
               borderBottomLeftRadius: 0,
             },
           }}
-          value={price}
+          value={priceWithComma}
           onChange={handleInputChange}
           placeholder="請輸入費用"
-          error={!price}
+          error={!priceWithComma}
         />
       </Box>
-      {!price && (
+      {!priceWithComma && (
         <FormHelperText sx={{ color: "red" }}>不可以為空白</FormHelperText>
       )}
       <div style={{ textAlign: "right" }}>

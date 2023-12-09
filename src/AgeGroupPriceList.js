@@ -49,7 +49,7 @@ function AgeGroupPriceList({ onChange }) {
     const newPriceSettings = priceSettings.map(
       (newSetting) => newSetting.ageGroup
     );
-    console.log(getNumberIntervals(newPriceSettings));
+    onChange(priceSettings);
     setNumberInterval(getNumberIntervals(newPriceSettings));
   }, [priceSettings]);
 
@@ -93,7 +93,7 @@ function AgeGroupPriceList({ onChange }) {
         <Button
           onClick={addSetting}
           disabled={numberInterval?.notInclude?.length === 0}
-          startIcon={<AddIcon sx={{ color: "#2eb2a7" }} />}
+          startIcon={<AddIcon />}
           sx={{ color: "#2eb2a7" }}
         >
           新增價格設定

@@ -22,18 +22,18 @@ function AgeGroupSelect({ ageGroup, setAgeGroup, overlaps }) {
     setAgeGroup([ageGroup[0], e.target.value]);
   };
   useEffect(() => {
-    console.log(overlaps);
     if (overlaps.length === 0) setError(false);
-    overlaps?.map((overlap) => {
+
+    const errorCheckList = overlaps?.map((overlap) => {
       const [start, end] = overlap;
       if (
         (startAge >= start && startAge <= end) ||
         (endAge >= start && endAge <= end)
       )
-        setError(true);
-      else setError(false);
-      return false;
+        return true;
+      else return false;
     });
+    setError(errorCheckList.includes(true));
   }, [endAge, overlaps, startAge]);
 
   return (
