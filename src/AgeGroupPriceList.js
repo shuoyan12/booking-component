@@ -3,60 +3,58 @@ import AgeGroupSelect from "./component/AgeGroupSelect";
 import { Box, Button } from "@mui/material";
 import PriceInput from "./component/PirceInput";
 import { useEffect, useState } from "react";
-import getNumberIntervals from "./util/ageHelper";
+import getNumberGroup from "./util/ageHelper";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DEFAULT_SETTING = {
-  key: new Date().getTime(),
   price: "0",
   ageGroup: [0, 20],
 };
+
 function AgeGroupPriceList({ onChange }) {
   const [priceSettings, setPriceSettings] = useState([DEFAULT_SETTING]);
   const [numberInterval, setNumberInterval] = useState({
     overlap: [],
-    notInclude: [0, 20],
+    notInclude: DEFAULT_SETTING.ageGroup,
   });
 
   const addSetting = () => {
-    const setting = {
-      ...DEFAULT_SETTING,
-      key: new Date().getTime(),
-    };
-    setPriceSettings([...priceSettings, setting]);
+    setPriceSettings([...priceSettings, DEFAULT_SETTING]);
   };
 
-  const removeSetting = (key) => {
-    setPriceSettings(priceSettings.filter((set) => set.key !== key));
-  };
-
-  const editPriceSetting = (index, price) => {
+  const removeSetting = (index) => {
     const newList = [...priceSettings];
-    newList[index] = { ...newList[index], price };
-
+    newList.splice(index, 1);
     setPriceSettings(newList);
   };
 
-  const editAgeGroupSetting = (index, ageGroup) => {
+  const editSetting = (index, param) => {
     const newList = [...priceSettings];
-    newList[index] = { ...newList[index], ageGroup };
+    newList[index] = { ...newList[index], ...param };
 
     setPriceSettings(newList);
   };
 
   useEffect(() => {
-    const newPriceSettings = priceSettings.map(
-      (newSetting) => newSetting.ageGroup
-    );
-    onChange(priceSettings);
-    setNumberInterval(getNumberIntervals(newPriceSettings));
-  }, [priceSettings]);
+    const newPriceSettings = [];
+    const settings = [];
+
+    priceSettings.forEach((newSetting) => {
+      let price = Number(newSetting.price);
+
+      settings.push({ ...newSetting, price });
+      newPriceSettings.push(newSetting.ageGroup);
+    });
+
+    onChange(settings);
+    setNumberInterval(getNumberGroup(newPriceSettings));
+  }, [onChange, priceSettings]);
 
   return (
     <Box>
       {priceSettings.map((setting, index) => (
-        <Box key={setting.key}>
+        <Box key={index}>
           {index > 0 && <hr />}
           <Box
             sx={{
@@ -70,7 +68,7 @@ function AgeGroupPriceList({ onChange }) {
               <Button
                 color="error"
                 startIcon={<CloseIcon />}
-                onClick={() => removeSetting(setting.key)}
+                onClick={() => removeSetting(index)}
               >
                 移除
               </Button>
@@ -79,12 +77,12 @@ function AgeGroupPriceList({ onChange }) {
           <Box sx={{ display: "flex", gap: 2 }}>
             <AgeGroupSelect
               ageGroup={setting.ageGroup}
-              setAgeGroup={(ageGroup) => editAgeGroupSetting(index, ageGroup)}
+              setAgeGroup={(ageGroup) => editSetting(index, { ageGroup })}
               overlaps={numberInterval.overlap}
             />
             <PriceInput
               price={setting.price}
-              setPrice={(price) => editPriceSetting(index, price)}
+              setPrice={(price) => editSetting(index, { price })}
             />
           </Box>
         </Box>

@@ -66,8 +66,12 @@ function AgeGroupSelect({ ageGroup, setAgeGroup, overlaps }) {
           sx={{
             background: "#ebe7e7",
             borderRadius: 0,
-            borderLeft: 0,
-            borderRight: 0,
+            "&.Mui-disabled": {
+              color: "#494747",
+              fontWeight: "bold",
+              borderLeft: 0,
+              borderRight: "0 !important",
+            },
           }}
         >
           ~

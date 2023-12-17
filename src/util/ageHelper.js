@@ -1,4 +1,4 @@
-function getNumberIntervals(intervals) {
+function getNumberGroup(intervals) {
   intervals.sort((a, b) => a[0] - b[0]);
   let overlap = generateOverlap(intervals);
   let notInclude = generateNotInclude(intervals);
@@ -61,4 +61,4 @@ function generateArray(start, end) {
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 }
 export { generateArray };
-export default getNumberIntervals;
+export default getNumberGroup;
